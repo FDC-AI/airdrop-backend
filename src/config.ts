@@ -8,8 +8,13 @@ const appConfig = yaml.load(
   readFileSync(join(configPath, 'app.yaml'), 'utf8')
 ) as AirDrop.Config.App;
 
+const blockchainConfig = yaml.load(
+  readFileSync(join(configPath, 'blockchain.yaml'), 'utf8')
+) as AirDrop.Config.Blockchain;
+
 const config = {
   app: appConfig,
+  blockchain: blockchainConfig,
 };
 
 export default config;

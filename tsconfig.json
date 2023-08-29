@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "build",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "lib": [
+      "DOM"
+    ]
   },
   "include": [
     "typings/**/*.ts",
