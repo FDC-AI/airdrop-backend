@@ -1,0 +1,17 @@
+{
+  "extends": "./node_modules/gts/",
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-namespace": "off",
+        "no-console": [
+          "warn",
+          {
+            "allow": ["info", "warn", "error"]
+          }
+        ]
+      }
+    }
+  ]
+}
