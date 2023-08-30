@@ -42,6 +42,7 @@ Body
 
 ```
 {
-  "dest": "destination_address"
+  "dest": "destination_address",
+  "chatID": "chatID"
 }
 ```

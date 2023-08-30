@@ -27,7 +27,7 @@ const JettonController = {
 
         const hash = await WalletService.getStatus(dest, queryId.toString());
         const subdomain = network === 'testnet' ? 'testnet.' : '';
-        const tonViewerUrl = `https://${subdomain}}tonviewer.com/transaction/${hash}`;
+        const tonViewerUrl = `https://${subdomain}tonviewer.com/transaction/${hash}`;
         tgBot.send(chatID, tonViewerUrl);
       })
       .catch(err => {

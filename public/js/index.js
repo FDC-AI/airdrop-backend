@@ -6,11 +6,19 @@ async function transfer() {
     dest: destAddress,
   });
 
-  const response = await fetch('/jetton/transfer', {
-    method: 'POST',
-    body: bodyContent,
-  });
-  const data = await response.text();
-  output.innerText = data;
+  try {
+    const response = await fetch('/jetton/transfer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: bodyContent,
+    });
+    const data = await response.text();
+    output.innerText = data;
+  } catch (error) {
+    output.innerText = 'error';
+  }
+
   return;
 }

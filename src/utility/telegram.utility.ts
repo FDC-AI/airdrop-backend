@@ -31,6 +31,8 @@ class TelegramUtility {
     );
 
     this.bot.launch();
+
+    console.info('Telegram bot started');
   }
 
   send(chatID: string, message: string) {
