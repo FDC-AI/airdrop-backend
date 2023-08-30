@@ -31,7 +31,7 @@ export default class WalletService {
   }
 
   async init() {
-    const network = config.blockchain.network;
+    const {network} = config.app;
     try {
       const tonweb = await this.tonweb(network);
       const endpoint = await this.getEndpoint(network);
@@ -52,10 +52,10 @@ export default class WalletService {
   }
 
   async transferJetton(args: {dest: string; amount: string}) {
-    const {jettonWalletAddress, jettonDecimal} = config.blockchain;
+    const {jettonWalletAddress, jettonDecimal} = config.app;
     const {dest, amount} = args;
     const address = this.address;
-    const queryId = 123;
+    const queryId = Date.now();
     const sendAmount = TonWeb.utils.fromNano(
       new Coins(amount, {
         decimals: jettonDecimal,

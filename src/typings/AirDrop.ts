@@ -3,12 +3,12 @@ declare namespace AirDrop {
   namespace Config {
     type App = {
       port: number;
-    };
-    type Blockchain = {
+      tgBotKey: string;
       network: string;
       mnemonic: string;
       jettonWalletAddress: string;
       jettonDecimal: number;
+      transferAmount: string;
     };
   }
 }
