@@ -2,7 +2,7 @@ import cookieParser from 'cookie-parser';
 import http from 'http';
 import express from 'express';
 import config from './config';
-import routes from './routes';
+import JettonController from './controller/jetton.controller';
 
 const bootstrap = async () => {
   const app = express();
@@ -17,7 +17,7 @@ const bootstrap = async () => {
     res.send('Hello World!');
   });
 
-  app.use('/jetton', routes.jetton);
+  app.post('/jetton/transfer', JettonController.transfer);
 
   const {port} = config.app;
 
