@@ -20,9 +20,7 @@
     "dev": "npm run build && concurrently -c 'auto' --kill-others npm:dev:*",
     "prisma:sync": "prisma migrate dev",
     "prisma:migrate": "prisma migrate dev --name $npm_config_name",
-    "prisma:deploy": "prisma migrate deploy",
-    "test": "jest",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "prisma:deploy": "prisma migrate deploy"
   },
   "author": "",
   "license": "ISC",
