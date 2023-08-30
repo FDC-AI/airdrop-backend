@@ -7,8 +7,9 @@ import {Cell} from 'tonweb/dist/types/boc/cell';
 import {TransferBodyParams} from 'tonweb/dist/types/contract/token/ft/jetton-wallet';
 import {BN} from 'bn.js';
 import {Address} from 'tonweb/dist/types/utils/address';
-import {Coins} from 'ton3-core';
+import {BOC, Coins} from 'ton3-core';
 import {Network} from '@orbs-network/ton-access';
+import {bitsToBigUint} from 'ton3-core/dist/utils/numbers';
 
 export default class WalletService {
   walletInstance: WalletV4ContractR2 | undefined;
@@ -101,6 +102,48 @@ export default class WalletService {
     const transfer = this.walletInstance?.methods.transfer(body);
     const result = await transfer?.send();
     console.info('transfer result', result);
+  }
+
+  static async getStatus(addressFromStorage: string, originalQueryId: string) {
+    const JettonWalletOpCodes = {
+      internal_transfer: 0x178d4519,
+      transfer: 0xf8a7ea5,
+      notify: 0x7362d09c,
+    };
+    const {network} = config.app;
+
+    const endpoint = await getHttpEndpoint({
+      network: network as Network,
+    });
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(endpoint));
+    let retryCount = 120;
+    while (retryCount > 0) {
+      try {
+        const txs = await tonweb.getTransactions(addressFromStorage, 10);
+        for (let i = 0; i < txs.length; i++) {
+          const tx = txs[i];
+          try {
+            const bodySlice = BOC.from(tx.in_msg.msg_data.body).root[0].slice();
+            const opCode = bodySlice.loadUint(32);
+            if (opCode === JettonWalletOpCodes.notify) {
+              const queryId = bodySlice.loadBits(64);
+              if (
+                queryId &&
+                bitsToBigUint(queryId).value.toString() === originalQueryId
+              ) {
+                return tx.transaction_id.hash;
+              }
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      retryCount -= 1;
+    }
   }
 
   static async mnemonicToKeyPair(mnemonic: string) {
