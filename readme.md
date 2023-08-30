@@ -10,6 +10,39 @@ npm install
 
 ## startup
 
+### dev mode
+
 ```
 npm run dev
+```
+
+### normal mode
+
+```
+npm run start
+```
+
+## API Usage
+
+### POST
+
+```
+host/jetton/transfer
+```
+
+Header
+
+```
+{
+  "Content-Type": "application/json"
+}
+```
+
+Body
+
+```
+{
+  "dest": "destination_address",
+  "chatID": "chatID"
+}
 ```

@@ -9,6 +9,7 @@ declare namespace AirDrop {
       jettonWalletAddress: string;
       jettonDecimal: number;
       transferAmount: string;
+      ngrokAuthToken: string;
     };
   }
 }
