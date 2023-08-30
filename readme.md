@@ -11,6 +11,5 @@ npm install
 ## startup
 
 ```
-npm run prepare
 npm run dev
 ```
