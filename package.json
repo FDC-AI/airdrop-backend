@@ -1,5 +1,5 @@
 {
-  "name": "tonlend",
+  "name": "airdrop-server",
   "version": "1.0.0",
   "description": "",
   "main": "./build/index.js",
@@ -13,7 +13,7 @@
     "prebuild": "npm run clean",
     "start:playground": "node -r dotenv/config ./build/index.js",
     "start:prod": "NODE_ENV=production node -r dotenv/config ./build/index.js",
-    "start": "npm run build && NODE_ENV=staging node -r dotenv/config ./build/index.js",
+    "start": "NODE_ENV=staging node -r dotenv/config ./build/index.js",
     "dev:build": "tsc -w --preserveWatchOutput",
     "dev:run": "NODE_ENV=development nodemon --watch './build' --enable-source-maps -r dotenv/config ./build/index.js",
     "dev": "npm run build && concurrently -c 'auto' --kill-others npm:dev:*"
