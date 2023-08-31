@@ -32,7 +32,7 @@ export default class TelegramUtility {
         ctx.reply('Missing arguements, Syntax: \n\n/send yourAddress');
       else {
         // add call backend api here
-        ctx.reply('Sending jetton to ' + destAddress[1] + ' requested\n' + id);
+        ctx.reply('Sending jetton to ' + destAddress[1] + ' requested\n');
       }
     });
 
@@ -50,4 +50,10 @@ export default class TelegramUtility {
   }
 }
 
-// export default tgBot;
+let tgBot: TelegramUtility | null = null;
+
+const initTgBot = (tgBotToken: string, domain: string) => {
+  tgBot = new TelegramUtility(tgBotToken, domain);
+};
+
+export {initTgBot, tgBot};
