@@ -1,5 +1,4 @@
 import {Telegraf} from 'telegraf';
-import config from '../config';
 export default class TelegramUtility {
   bot: Telegraf;
   constructor(tgBotToken: string, domain: string) {

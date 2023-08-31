@@ -2,7 +2,6 @@ import {Request, Response} from 'express';
 import WalletService from '../services/wallet.service';
 import config from '../config';
 import AsyncLock from 'async-lock';
-import TelegramUtility from '../utility/telegram.utility';
 
 const lock = new AsyncLock();
 
