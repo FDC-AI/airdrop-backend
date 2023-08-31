@@ -113,8 +113,6 @@ export default class WalletService {
     const tonweb = await this.tonweb(network);
     const balance = Coins.fromNano(await tonweb.getBalance(address));
     const fee = new Coins(TRANSFER_FEE);
-    console.log('balance', balance.toString());
-    console.log('fee', fee.toString());
     return fee.lt(balance);
   }
 
