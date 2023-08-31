@@ -2,7 +2,7 @@ import {Request, Response} from 'express';
 import WalletService from '../services/wallet.service';
 import config from '../config';
 import AsyncLock from 'async-lock';
-import tgBot from '../utility/telegram.utility';
+import TelegramUtility from '../utility/telegram.utility';
 
 const lock = new AsyncLock();
 
@@ -22,6 +22,9 @@ const JettonController = {
           amount: transferAmount,
         });
 
+        const tgBot = req.app.get('tgBot');
+        if (!tgBot) throw new Error('tgBot not initialized');
+
         const sendingMessage = `Sending jetton to ${dest} requested\n ${chatID}`;
         tgBot.send(chatID, sendingMessage);
 
@@ -29,6 +32,7 @@ const JettonController = {
         const subdomain = network === 'testnet' ? 'testnet.' : '';
         const tonViewerUrl = `https://${subdomain}tonviewer.com/transaction/${hash}`;
         tgBot.send(chatID, tonViewerUrl);
+        console.info(`transtaction hash: ${hash}`);
       })
       .catch(err => {
         console.error(err);

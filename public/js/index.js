@@ -1,9 +1,13 @@
 async function transfer() {
   const destAddress = document.getElementById('destAddr').value;
   const output = window.document.querySelector('#serverRES');
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const chatID = urlParams.get('id');
 
   const bodyContent = JSON.stringify({
     dest: destAddress,
+    chatID,
   });
 
   try {

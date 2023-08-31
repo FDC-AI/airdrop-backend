@@ -1,14 +1,25 @@
 import {Telegraf} from 'telegraf';
 import config from '../config';
-class TelegramUtility {
+export default class TelegramUtility {
   bot: Telegraf;
-  constructor(tgBotToken: string) {
+  constructor(tgBotToken: string, domain: string) {
     this.bot = new Telegraf(tgBotToken);
-    this.init();
+    this.init(domain);
   }
-  init() {
+  init(domain: string) {
     this.bot.start(ctx => {
+      const chatID = ctx.message?.chat.id;
       ctx.reply('Type /help to get more information');
+      const twaUrl = `${domain}?id=${chatID}`;
+      ctx.setChatMenuButton({
+        type: 'web_app',
+        text: 'launch App',
+        web_app: {url: twaUrl},
+      });
+      ctx.telegram.setMyCommands([
+        {command: 'send', description: '輸入對方地址以開始轉帳'},
+        {command: 'help', description: '顯示指令列表'},
+      ]);
     });
 
     this.bot.command('send', ctx => {
@@ -40,8 +51,4 @@ class TelegramUtility {
   }
 }
 
-const {tgBotKey} = config.app;
-
-const tgBot = new TelegramUtility(tgBotKey);
-
-export default tgBot;
+// export default tgBot;
