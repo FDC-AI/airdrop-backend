@@ -5,6 +5,7 @@ import config from './config';
 import ngrok from 'ngrok';
 import JettonController from './controller/jetton.controller';
 import TelegramUtility, {initTgBot, tgBot} from './utility/telegram.utility';
+import WalletService from './services/wallet.service';
 
 const bootstrap = async () => {
   const app = express();

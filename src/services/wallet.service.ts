@@ -187,4 +187,8 @@ export default class WalletService {
     }
     return cell;
   }
+
+  static validateAddress(address: string) {
+    return TonWeb.utils.Address.isValid(address);
+  }
 }
