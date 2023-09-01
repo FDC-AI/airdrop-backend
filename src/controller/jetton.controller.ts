@@ -26,13 +26,14 @@ const JettonController = {
 
         if (!tgBot) throw new Error('tgBot not initialized');
 
-        const sendingMessage = `Sending jetton to ${dest} requested\n ${chatID}`;
+        const sendingMessage = `Sending jetton to ${dest} requested`;
         tgBot.send(chatID, sendingMessage);
 
         const hash = await WalletService.getStatus(dest, queryId.toString());
         const subdomain = network === 'testnet' ? 'testnet.' : '';
         const tonViewerUrl = `https://${subdomain}tonviewer.com/transaction/${hash}`;
-        tgBot.send(chatID, tonViewerUrl);
+        const successMessage = `Successfully sent \nlink: ${tonViewerUrl}`;
+        tgBot.send(chatID, successMessage);
 
         console.info(`transtaction hash: ${hash}`);
       })
