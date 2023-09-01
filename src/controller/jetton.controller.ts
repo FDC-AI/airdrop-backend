@@ -11,6 +11,9 @@ const JettonController = {
     const {dest, chatID} = req.body;
     const {mnemonic, transferAmount, network} = config.app;
 
+    if (!WalletService.validateAddress(dest))
+      return res.send('invalid address');
+
     if (lock.isBusy('transfer')) return res.send('service is busy');
     const wallet = new WalletService(mnemonic);
     await wallet.init();
@@ -26,7 +29,7 @@ const JettonController = {
 
         if (!tgBot) throw new Error('tgBot not initialized');
 
-        const sendingMessage = `Sending jetton to ${dest} requested`;
+        const sendingMessage = `Sending jetton to ${dest}`;
         tgBot.send(chatID, sendingMessage);
 
         const hash = await WalletService.getStatus(dest, queryId.toString());
