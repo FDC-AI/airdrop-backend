@@ -27,8 +27,6 @@ export default class TelegramUtility {
     });
 
     this.bot.command('send', async ctx => {
-      const chatID = ctx.message?.chat.id;
-      const id = chatID;
       const userMessage = ctx.message!.text;
       const destAddress = userMessage!.split(' ');
       if (destAddress.length > 2)
@@ -37,8 +35,14 @@ export default class TelegramUtility {
         ctx.reply('Missing arguements, Syntax: \n\n/send yourAddress');
       else {
         const {mnemonic, transferAmount, network} = config.app;
+        const dest = destAddress[1];
 
-        if (lock.isBusy('transfer')) {
+        if (!WalletService.validateAddress(dest)) {
+          ctx.reply('invalid address');
+          return;
+        }
+
+        if (lock.isBusy('transfer_tg')) {
           ctx.reply('service is busy');
           return;
         }
@@ -50,10 +54,9 @@ export default class TelegramUtility {
           ctx.reply('not enough balance');
           return;
         }
-        const dest = destAddress[1];
 
         lock
-          .acquire('transfer', async () => {
+          .acquire('transfer_tg', async () => {
             const queryId = await wallet.transferJetton({
               dest,
               amount: transferAmount,
@@ -68,7 +71,8 @@ export default class TelegramUtility {
             );
             const subdomain = network === 'testnet' ? 'testnet.' : '';
             const tonViewerUrl = `https://${subdomain}tonviewer.com/transaction/${hash}`;
-            ctx.reply(tonViewerUrl);
+            const successMessage = `Successfully sent \nlink: ${tonViewerUrl}`;
+            ctx.reply(successMessage);
             console.info(`transtaction hash: ${hash}`);
           })
           .catch(err => {
