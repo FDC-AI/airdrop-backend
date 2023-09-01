@@ -4,7 +4,7 @@ import express from 'express';
 import config from './config';
 import ngrok from 'ngrok';
 import JettonController from './controller/jetton.controller';
-import TelegramUtility from './utility/telegram.utility';
+import TelegramUtility, {initTgBot, tgBot} from './utility/telegram.utility';
 
 const bootstrap = async () => {
   const app = express();
@@ -19,8 +19,7 @@ const bootstrap = async () => {
     };
     const url = await ngrok.connect(ngrokPayload);
     console.info(`ngrok url: ${url}`);
-    const tgBot = new TelegramUtility(tgBotKey, url);
-    app.set('tgBot', tgBot);
+    initTgBot(tgBotKey, url);
   }
 
   app.use(cookieParser());

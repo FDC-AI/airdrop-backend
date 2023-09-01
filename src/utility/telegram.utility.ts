@@ -50,4 +50,10 @@ export default class TelegramUtility {
   }
 }
 
-// export default tgBot;
+let tgBot: TelegramUtility | null = null;
+
+const initTgBot = (tgBotToken: string, domain: string) => {
+  tgBot = new TelegramUtility(tgBotToken, domain);
+};
+
+export {initTgBot, tgBot};

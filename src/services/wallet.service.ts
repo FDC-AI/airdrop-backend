@@ -11,6 +11,8 @@ import {BOC, Coins} from 'ton3-core';
 import {Network} from '@orbs-network/ton-access';
 import {bitsToBigUint} from 'ton3-core/dist/utils/numbers';
 
+const TRANSFER_FEE = '0.8';
+
 export default class WalletService {
   walletInstance: WalletV4ContractR2 | undefined;
   mnemonic: string;
@@ -77,7 +79,7 @@ export default class WalletService {
     const payload = WalletService.createTransferBody(params);
 
     try {
-      await this.transfer(jettonWalletAddress, '0.8', payload);
+      await this.transfer(jettonWalletAddress, TRANSFER_FEE, payload);
     } catch (error) {
       console.error(error);
       throw new Error('Jetton transfer unknown error');
@@ -102,6 +104,16 @@ export default class WalletService {
     const transfer = this.walletInstance?.methods.transfer(body);
     const result = await transfer?.send();
     console.info('transfer result', result);
+  }
+
+  async checkBalanceEnough() {
+    const {address} = this;
+    if (!address) throw new Error('please initalize wallet first');
+    const {network} = config.app;
+    const tonweb = await this.tonweb(network);
+    const balance = Coins.fromNano(await tonweb.getBalance(address));
+    const fee = new Coins(TRANSFER_FEE);
+    return fee.lt(balance);
   }
 
   static async getStatus(addressFromStorage: string, originalQueryId: string) {
@@ -131,7 +143,9 @@ export default class WalletService {
                 queryId &&
                 bitsToBigUint(queryId).value.toString() === originalQueryId
               ) {
-                return tx.transaction_id.hash;
+                return tx.transaction_id.hash
+                  .replace('+', '-')
+                  .replace('/', '_');
               }
             }
           } catch (err) {
